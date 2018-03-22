@@ -11,6 +11,7 @@ filegroup(
     srcs = [
         "call_variants",
         "make_examples",
+        "candidates_stats",
         "model_eval",
         "model_train",
         "postprocess_variants",
@@ -49,6 +50,7 @@ py_library(
         ":data_providers",
         ":haplotypes",
         ":make_examples_lib",
+        ":candidates_stats_lib",
         ":model_eval_lib",
         ":model_train_lib",
         ":modeling",
@@ -282,6 +284,47 @@ py_test(
         "@com_google_absl_py//absl/logging",
         "@com_google_absl_py//absl/testing:absltest",
         "@com_google_absl_py//absl/testing:parameterized",
+    ],
+)
+
+py_library(
+    name = "candidates_stats_lib",
+    srcs = ["candidates_stats.py"],
+    srcs_version = "PY2AND3",
+    deps = [
+        ":exclude_contigs",
+        ":logging_level",
+        ":pileup_image",
+        ":tf_utils",
+        ":variant_caller",
+        ":variant_labeler",
+        "//deepvariant/core:errors",
+        "//deepvariant/core:genomics_io",
+        "//deepvariant/core:htslib_gcp_oauth",
+        "//deepvariant/core:io_utils",
+        "//deepvariant/core:proto_utils",
+        "//deepvariant/core:py_utils",
+        "//deepvariant/core:ranges",
+        "//deepvariant/core:variantutils",
+        "//deepvariant/core/protos:core_py_pb2",
+        "//deepvariant/core/python:hts_verbose",
+        "//deepvariant/protos:deepvariant_py_pb2",
+        "//deepvariant/python:allelecounter",
+        "//deepvariant/realigner",
+        "//deepvariant/vendor:timer",
+        "@com_google_absl_py//absl/flags",
+        "@com_google_absl_py//absl/logging",
+    ],
+)
+
+py_binary(
+    name = "candidates_stats",
+    srcs = [
+        "candidates_stats.py",
+    ],
+    main = "candidates_stats.py",
+    deps = [
+        ":candidates_stats_lib",
     ],
 )
 
